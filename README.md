@@ -216,7 +216,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📧 Contact
 
-Juri Gregg - [Your GitHub Profile](https://github.com/greggjuri)
+Juri Gregg - [Juri's GitHub](https://github.com/greggjuri)
 
 Project Link: [https://github.com/greggjuri/sports-schedule](https://github.com/greggjuri/sports-schedule)
 
