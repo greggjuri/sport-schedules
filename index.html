@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Schedule | Juri Gregg</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .columns-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sport-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .sport-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .sport-logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-right: 12px;
+        }
+
+        .sport-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .game-card {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-left: 3px solid #667eea;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .game-card:hover {
+            transform: translateX(3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .game-card.clickable {
+            cursor: pointer;
+        }
+
+        .game-card.clickable:hover {
+            background: #f1f3f5;
+        }
+
+        .game-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .game-teams {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3748;
+            line-height: 1.4;
+        }
+
+        .game-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .tv-channel {
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .error {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .no-games {
+            text-align: center;
+            color: #718096;
+            font-style: italic;
+            padding: 16px;
+            font-size: 0.9rem;
+        }
+
+        .tournament-info {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 14px;
+            border-left: 3px solid #48bb78;
+        }
+
+        .tournament-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .favorite-game {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-left: 3px solid #f59e0b;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .favorite-game:hover {
+            transform: translateX(3px) scale(1.01);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .favorite-game .game-teams {
+            color: #92400e;
+            font-size: 1.05rem;
+        }
+
+        .favorite-badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .leaders-section {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .team-leaders {
+            font-size: 0.8rem;
+        }
+
+        .team-leaders-title {
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .leader-stat {
+            font-size: 0.78rem;
+            color: #4b5563;
+            margin-bottom: 3px;
+            line-height: 1.5;
+        }
+
+        .leader-stat:last-child {
+            margin-bottom: 0;
+        }
+
+        .leader-label {
+            font-weight: 600;
+            color: #374151;
+            display: inline-block;
+            min-width: 55px;
+        }
+
+        @media (max-width: 1024px) {
+            .columns-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .sport-title {
+                font-size: 1.1rem;
+            }
+
+            .sport-logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .game-info {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            body {
+                font-size: 13px;
+            }
+
+            .leaders-section {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏆 Sports Schedule</h1>
+            <p class="subtitle">Your fix for moderate to severe Sports Addiction</p>
+        </header>
+
+        <div id="sportsContent">
+            <div class="loading">Loading sports data...</div>
+        </div>
+    </div>
+
+    <script>
+        const API_ENDPOINT = 'api.php';
+        
+        const FAVORITE_TEAMS = [
+            'Detroit Lions',
+            'Tampa Bay Buccaneers',
+            'Tampa Bay Lightning',
+            'Michigan Wolverines',
+            'Michigan',
+            'Michigan State Spartans',
+            'Michigan State',
+            'Detroit Tigers'
+        ];
+
+        const SPORT_LOGOS = {
+            nfl: 'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png',
+            nhl: 'https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png',
+            cfb: 'https://a.espncdn.com/combiner/i?img=/redesign/assets/img/icons/ESPN-icon-football-college.png&w=100&h=100',
+            mlb: 'https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png',
+            pga: 'https://a.espncdn.com/combiner/i?img=/redesign/assets/img/icons/ESPN-icon-golf.png&w=100&h=100'
+        };
+
+        function isFavoriteTeam(teamName) {
+            return FAVORITE_TEAMS.some(fav => 
+                teamName.toLowerCase().includes(fav.toLowerCase()) ||
+                fav.toLowerCase().includes(teamName.toLowerCase())
+            );
+        }
+
+        async function fetchSportsData() {
+            try {
+                const response = await fetch(API_ENDPOINT);
+                if (!response.ok) throw new Error('Failed to fetch data');
+                const data = await response.json();
+                console.log('Fetched data:', data);
+                displaySportsData(data);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('sportsContent').innerHTML = 
+                    `<div class="error">Failed to load sports data: ${error.message}</div>`;
+            }
+        }
+
+        function displaySportsData(data) {
+            try {
+                const container = document.getElementById('sportsContent');
+                let leftColumn = '';
+                let rightColumn = '';
+
+                // NFL
+                if (data.nfl && data.nfl.events) {
+                    const weekNumber = data.nfl.week ? data.nfl.week.number : null;
+                    const weekLabel = weekNumber ? `Week ${weekNumber}` : 'This Week';
+                    console.log('NFL Week Number:', weekNumber);
+                    leftColumn += createSportSection('nfl', 'NFL', data.nfl.events, weekLabel, weekNumber);
+                }
+
+                // CFB
+                if (data.cfb && data.cfb.events) {
+                    leftColumn += createSportSection('cfb', 'College Football', data.cfb.events, 'Top 20 Teams');
+                }
+
+                // NHL
+                if (data.nhl && data.nhl.events) {
+                    rightColumn += createSportSection('nhl', 'NHL', data.nhl.events, 'Next 5 Days');
+                }
+
+                // MLB
+                if (data.mlb && data.mlb.events) {
+                    rightColumn += createSportSection('mlb', 'MLB', data.mlb.events, 'Next 3 Days');
+                }
+
+                // PGA
+                if (data.pga) {
+                    rightColumn += createTournamentSection('pga', 'PGA Tour', data.pga);
+                }
+
+                const html = `
+                    <div class="columns-wrapper">
+                        <div class="column">${leftColumn}</div>
+                        <div class="column">${rightColumn}</div>
+                    </div>
+                `;
+
+                container.innerHTML = html || '<div class="error">No sports data available</div>';
+                
+                // Add click listeners for NFL
+                const nflCards = document.querySelectorAll('.game-card[data-nfl-url]');
+                console.log('Found NFL clickable cards:', nflCards.length);
+                
+                nflCards.forEach((card, index) => {
+                    const url = card.getAttribute('data-nfl-url');
+                    console.log(`Card ${index} URL:`, url);
+                    card.addEventListener('click', function() {
+                        console.log('Opening:', url);
+                        window.open(url, '_blank');
+                    });
+                });
+            } catch (error) {
+                console.error('Error in displaySportsData:', error);
+                document.getElementById('sportsContent').innerHTML = 
+                    `<div class="error">Error displaying data: ${error.message}</div>`;
+            }
+        }
+
+        function createSportSection(sportKey, title, events, timeframe, weekNumber = null) {
+            try {
+                if (!events || events.length === 0) {
+                    return `
+                        <div class="sport-section">
+                            <div class="sport-header">
+                                <img src="${SPORT_LOGOS[sportKey]}" alt="${title}" class="sport-logo">
+                                <h2 class="sport-title">${title}</h2>
+                            </div>
+                            <div class="no-games">No games scheduled</div>
+                        </div>
+                    `;
+                }
+
+                const isCFB = sportKey === 'cfb';
+                const isNFL = sportKey === 'nfl';
+
+                let gamesHtml = events.map(event => {
+                    try {
+                        const competition = event.competitions[0];
+                        const homeTeam = competition.competitors.find(c => c.homeAway === 'home');
+                        const awayTeam = competition.competitors.find(c => c.homeAway === 'away');
+                        
+                        let awayName = awayTeam ? awayTeam.team.displayName : 'TBD';
+                        let homeName = homeTeam ? homeTeam.team.displayName : 'TBD';
+                        
+                        // NFL records
+                        if (isNFL) {
+                            if (awayTeam && awayTeam.records) {
+                                const record = awayTeam.records.find(r => r.type === 'total' || r.name === 'overall');
+                                if (record && record.summary) {
+                                    const parts = record.summary.split('-');
+                                    const formatted = parts.length === 2 ? `${record.summary}-0` : record.summary;
+                                    awayName += ` (${formatted})`;
+                                }
+                            }
+                            if (homeTeam && homeTeam.records) {
+                                const record = homeTeam.records.find(r => r.type === 'total' || r.name === 'overall');
+                                if (record && record.summary) {
+                                    const parts = record.summary.split('-');
+                                    const formatted = parts.length === 2 ? `${record.summary}-0` : record.summary;
+                                    homeName += ` (${formatted})`;
+                                }
+                            }
+                        }
+                        
+                        // Build NFL URL
+                        let nflUrl = '';
+                        if (isNFL && awayTeam && homeTeam && weekNumber) {
+                            const awayTeamName = awayTeam.team.name || awayTeam.team.displayName || '';
+                            const homeTeamName = homeTeam.team.name || homeTeam.team.displayName || '';
+                            
+                            console.log('URL Build:', {awayTeamName, homeTeamName, weekNumber});
+                            
+                            if (awayTeamName && homeTeamName) {
+                                const awaySlug = awayTeamName.toLowerCase().replace(/\s+/g, '-');
+                                const homeSlug = homeTeamName.toLowerCase().replace(/\s+/g, '-');
+                                const year = new Date(event.date).getFullYear();
+                                nflUrl = `https://www.nfl.com/games/${awaySlug}-at-${homeSlug}-${year}-reg-${weekNumber}?tab=overview`;
+                                console.log('Built URL:', nflUrl);
+                            }
+                        }
+                        
+                        // CFB rankings
+                        if (isCFB) {
+                            if (awayTeam && awayTeam.curatedRank && awayTeam.curatedRank.current <= 25) {
+                                awayName += ` (${awayTeam.curatedRank.current})`;
+                            }
+                            if (homeTeam && homeTeam.curatedRank && homeTeam.curatedRank.current <= 25) {
+                                homeName += ` (${homeTeam.curatedRank.current})`;
+                            }
+                        }
+                        
+                        const isFavorite = isFavoriteTeam(awayName) || isFavoriteTeam(homeName);
+                        const favoriteClass = isFavorite ? 'favorite-game' : '';
+                        const favoriteBadge = isFavorite ? '<span class="favorite-badge">⭐ FAVORITE</span>' : '';
+                        
+                        const date = new Date(event.date);
+                        const dateStr = date.toLocaleDateString('en-US', { 
+                            weekday: 'short', 
+                            month: 'short', 
+                            day: 'numeric' 
+                        });
+                        const timeStr = date.toLocaleTimeString('en-US', { 
+                            hour: 'numeric', 
+                            minute: '2-digit',
+                            timeZoneName: 'short'
+                        });
+
+                        const broadcasts = competition.broadcasts || [];
+                        let tvChannel = 'Not available';
+                        if (broadcasts.length > 0 && broadcasts[0].names && broadcasts[0].names.length > 0) {
+                            tvChannel = broadcasts[0].names.join(', ');
+                        }
+
+                        // NFL leaders
+                        let leadersHtml = '';
+                        if (isNFL) {
+                            try {
+                                leadersHtml = '<div class="leaders-section">';
+                                
+                                // Away team
+                                if (awayTeam && awayTeam.leaders) {
+                                    leadersHtml += '<div class="team-leaders">';
+                                    leadersHtml += `<div class="team-leaders-title">${awayTeam.team.shortDisplayName || awayTeam.team.displayName}</div>`;
+                                    
+                                    const awayPass = awayTeam.leaders.find(l => l.name === 'passingLeader');
+                                    const awayRush = awayTeam.leaders.find(l => l.name === 'rushingLeader');
+                                    const awayRec = awayTeam.leaders.find(l => l.name === 'receivingLeader');
+                                    
+                                    if (awayPass && awayPass.leaders && awayPass.leaders[0]) {
+                                        const l = awayPass.leaders[0];
+                                        leadersHtml += `<div class="leader-stat"><span class="leader-label">🎯 Pass:</span> ${l.athlete.shortName} ${l.displayValue}</div>`;
+                                    }
+                                    if (awayRush && awayRush.leaders && awayRush.leaders[0]) {
+                                        const l = awayRush.leaders[0];
+                                        leadersHtml += `<div class="leader-stat"><span class="leader-label">🏃 Rush:</span> ${l.athlete.shortName} ${l.displayValue}</div>`;
+                                    }
+                                    if (awayRec && awayRec.leaders && awayRec.leaders[0]) {
+                                        const l = awayRec.leaders[0];
+                                        leadersHtml += `<div class="leader-stat"><span class="leader-label">🙌 Rec:</span> ${l.athlete.shortName} ${l.displayValue}</div>`;
+                                    }
+                                    
+                                    leadersHtml += '</div>';
+                                }
+                                
+                                // Home team
+                                if (homeTeam && homeTeam.leaders) {
+                                    leadersHtml += '<div class="team-leaders">';
+                                    leadersHtml += `<div class="team-leaders-title">${homeTeam.team.shortDisplayName || homeTeam.team.displayName}</div>`;
+                                    
+                                    const homePass = homeTeam.leaders.find(l => l.name === 'passingLeader');
+                                    const homeRush = homeTeam.leaders.find(l => l.name === 'rushingLeader');
+                                    const homeRec = homeTeam.leaders.find(l => l.name === 'receivingLeader');
+                                    
+                                    if (homePass && homePass.leaders && homePass.leaders[0]) {
+                                        const l = homePass.leaders[0];
+                                        leadersHtml += `<div class="leader-stat"><span class="leader-label">🎯 Pass:</span> ${l.athlete.shortName} ${l.displayValue}</div>`;
+                                    }
+                                    if (homeRush && homeRush.leaders && homeRush.leaders[0]) {
+                                        const l = homeRush.leaders[0];
+                                        leadersHtml += `<div class="leader-stat"><span class="leader-label">🏃 Rush:</span> ${l.athlete.shortName} ${l.displayValue}</div>`;
+                                    }
+                                    if (homeRec && homeRec.leaders && homeRec.leaders[0]) {
+                                        const l = homeRec.leaders[0];
+                                        leadersHtml += `<div class="leader-stat"><span class="leader-label">🙌 Rec:</span> ${l.athlete.shortName} ${l.displayValue}</div>`;
+                                    }
+                                    
+                                    leadersHtml += '</div>';
+                                }
+                                
+                                leadersHtml += '</div>';
+                            } catch (leaderError) {
+                                console.error('Leader error:', leaderError);
+                                leadersHtml = '';
+                            }
+                        }
+
+                        const clickableClass = nflUrl ? 'clickable' : '';
+                        const dataUrl = nflUrl ? `data-nfl-url="${nflUrl}"` : '';
+                        const titleAttr = nflUrl ? 'title="Click to view on NFL.com"' : '';
+
+                        return `
+                            <div class="game-card ${favoriteClass} ${clickableClass}" ${dataUrl} ${titleAttr}>
+                                <div class="game-teams">${awayName} @ ${homeName}${favoriteBadge}</div>
+                                <div class="game-info">
+                                    <div class="info-item">
+                                        <span class="info-label">📅</span>
+                                        <span>${dateStr}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">🕐</span>
+                                        <span>${timeStr}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="tv-channel">📺 ${tvChannel}</span>
+                                    </div>
+                                </div>
+                                ${leadersHtml}
+                            </div>
+                        `;
+                    } catch (eventError) {
+                        console.error('Event error:', eventError);
+                        return '';
+                    }
+                }).join('');
+
+                return `
+                    <div class="sport-section">
+                        <div class="sport-header">
+                            <img src="${SPORT_LOGOS[sportKey]}" alt="${title}" class="sport-logo">
+                            <h2 class="sport-title">${title}</h2>
+                        </div>
+                        ${gamesHtml}
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Section error:', error);
+                return `<div class="sport-section"><div class="error">Error loading ${title}</div></div>`;
+            }
+        }
+
+        function createTournamentSection(sportKey, title, tournament) {
+            if (!tournament) {
+                return `
+                    <div class="sport-section">
+                        <div class="sport-header">
+                            <img src="${SPORT_LOGOS[sportKey]}" alt="${title}" class="sport-logo">
+                            <h2 class="sport-title">${title}</h2>
+                        </div>
+                        <div class="no-games">No upcoming tournament</div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="sport-section">
+                    <div class="sport-header">
+                        <img src="${SPORT_LOGOS[sportKey]}" alt="${title}" class="sport-logo">
+                        <h2 class="sport-title">${title}</h2>
+                    </div>
+                    <div class="tournament-info">
+                        <div class="tournament-name">${tournament.name || 'Tournament TBD'}</div>
+                        <div class="game-info">
+                            <div class="info-item">
+                                <span class="info-label">📍</span>
+                                <span>${tournament.location || 'TBD'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">📅</span>
+                                <span>${tournament.dates || 'TBD'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        fetchSportsData();
+        setInterval(fetchSportsData, 12 * 60 * 60 * 1000);
+    </script>
+</body>
+</html>
