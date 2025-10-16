@@ -1,0 +1,39 @@
+# Cache files
+sports_cache.json
+
+# PHP error logs
+error_log
+*.log
+
+# Environment and config files (if you add any later)
+.env
+.env.local
+config.local.php
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Backup files
+*.bak
+*.backup
+*.old
