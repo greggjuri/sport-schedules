@@ -5,6 +5,7 @@ A real-time sports aggregation dashboard that consolidates upcoming games from N
 ![Sports Dashboard](https://img.shields.io/badge/PHP-7.4+-777BB4?style=flat&logo=php&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat&logo=javascript&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Status](https://img.shields.io/badge/Status-Active-success)
 
 ## 🎯 Features
 
