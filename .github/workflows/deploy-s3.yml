@@ -6,6 +6,8 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'styles.css'
+      - 'script.js'
   workflow_dispatch:
 
 jobs:
@@ -24,6 +26,8 @@ jobs:
       - name: Sync frontend to S3
         run: |
           aws s3 cp index.html s3://jurigregg-static-site/sports/index.html
+          aws s3 cp styles.css s3://jurigregg-static-site/sports/styles.css
+          aws s3 cp script.js  s3://jurigregg-static-site/sports/script.js
 
       - name: Invalidate CloudFront
         run: |

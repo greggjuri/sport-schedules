@@ -54,6 +54,31 @@ function fetchNHL5Days() {
     return ['events' => $allEvents];
 }
 
+// Fetch MLB for 3 days
+function fetchMLB3Days() {
+    $allEvents = [];
+    for ($i = 0; $i < 3; $i++) {
+        usleep(300000);
+        $date = date('Ymd', strtotime("+{$i} days"));
+        $url = "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates={$date}";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+        $response = curl_exec($ch);
+        curl_close($ch);
+        if ($response) {
+            $data = json_decode($response, true);
+            if (isset($data['events'])) {
+                $allEvents = array_merge($allEvents, $data['events']);
+            }
+        }
+    }
+    return ['events' => $allEvents];
+}
+
 // Fetch CFB with Michigan schools
 function fetchCFB() {
     $mainData = fetchESPN('football', 'college-football');
@@ -180,8 +205,7 @@ try {
     $data['cfb'] = ['events' => filterCFBTop20($cfbFiltered)];
     usleep(300000);
     
-    $mlbData = fetchESPN('baseball', 'mlb');
-    $data['mlb'] = ['events' => filterNext3Days($mlbData['events'] ?? [])];
+    $data['mlb'] = fetchMLB3Days();
     usleep(300000);
     
     $data['pga'] = getPGA();
